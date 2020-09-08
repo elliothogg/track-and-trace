@@ -322,6 +322,7 @@ Here is a video explaining the process
 
 <iframe width="1280" height="720" src="https://web.microsoftstream.com/embed/video/4ecb0839-6fd9-48bc-b563-3ab2122ef011?autoplay=false&amp;showinfo=true" allowfullscreen style="border:none;"></iframe>
 
+Video can be found here - https://web.microsoftstream.com/video/4ecb0839-6fd9-48bc-b563-3ab2122ef011
 
 ## Marking Criteria
 
