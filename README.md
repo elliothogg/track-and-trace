@@ -1,6 +1,22 @@
 ## Learning Outcomes
 
+- To be able to read a case study, and sectioned instructions and translate a
+ problem into a viable programmatic solution
+- To be able to use a development process with version control to develop a
+ solution to the described problem
+- Apply Java Obejct Oriented fundamentals to a project in order to produce a
+ solution to the problem
+
 ## Skills Outcomes
+
+- Use applied Object Oriented Programming to develop a solution to the problem
+- Use correct programming and software engineering techniques to develop a
+ solution
+- Use control flow to build a usable command line interface
+- Describe primitive tests for the program
+- Be able to reflect on the development process and highlight processes in
+ the reflective cycle to describe for preparing for future assignments
+
 
 ## Case Study
 
@@ -309,6 +325,13 @@ For more information about how to write using markdown - see this link https://w
 
 ## Steps for Obtaining Java Files
 
+NUCode link - https://nucode.ncl.ac.uk/scomp/msc-computer-science/csc8011
+Canvas link - 
+NESS Link - 
+
+
+/coursework/csc8011-track-and-trace
+
 1. Go to https://nucode.ncl.ac.uk/scomp/msc-computer-science/csc8011/coursework/csc8011-track-and-trace
 2. Click Fork
 3. Select your Portfolio Space
@@ -327,14 +350,19 @@ Video can be found here - https://web.microsoftstream.com/video/4ecb0839-6fd9-48
 ## Marking Criteria
 
 **Code 90%** 
+
+- Section 1 : 20%
+- Section 2 : 20%
+- Section 3 : 25%
+- Section 4 : 25%
+
 **Report 10%** 
-
-## Marking Rubric
-
-|Section|Mark Weighting||
 
 ## Deliverables
 
+Submit a .zip file which includes all of your source code and reflective
+ report to NESS by the deadline specified on NESS and Canvas. If you do not
+  submit on time then a late cap will be added to your mark.
 
 
 
