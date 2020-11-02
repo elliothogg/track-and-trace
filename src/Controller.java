@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.regex.Pattern;
 
 public class Controller {
@@ -49,7 +51,11 @@ public class Controller {
     }
 
     public ArrayList<Event> filterEventByDate(String date)
-    {
+    {   
+        if (!isValidDate(date))
+        {
+            throw new IllegalArgumentException("Date must be in format \"dd/MM/yyyy\" and must not be in the future!");
+        }
         ArrayList<Event> filteredEvents = new ArrayList<>();
         for (int i = 0; i < events.size(); i ++)
         {
@@ -93,6 +99,25 @@ public class Controller {
         return email.matches(".*@.*\\..*");
     }
 
+    public boolean isValidDate(String date)
+    {   
+        try
+        {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate realDate = LocalDate.parse(date, formatter);
+        LocalDate todaysDate = LocalDate.now();
+        if (realDate.isAfter(todaysDate))
+        {
+            return false;
+        }
+        else return true;
+        }
+        catch (DateTimeParseException e)
+        {
+        return false;
+        }
+    }
+
 
 
     public static void main(String[] args) {
@@ -104,7 +129,7 @@ public class Controller {
         Establishment e2 = new Establishment("wembley arena", "1 Wembley Road", "WM1 4AS", 90000);
         Establishment e3 = new Establishment("Millenium Stadium", "1 Wembley Road", "WM1 4AS", 90000);
         
-        Event e = new Event(me,LocalDateTime.of(2020, 11, 02, 12, 12, 12), 2, e1);
+        Event e = new Event(me,LocalDateTime.of(2020, 11, 01, 12, 12, 12), 2, e1);
         Event ev1 = new Event(me1,LocalDateTime.now(), 2, e2);
         Event ev2 = new Event(me,LocalDateTime.now(), 2, e3);
 
@@ -115,11 +140,13 @@ public class Controller {
         c.addEstablishment(e2);
         c.addEstablishment(e3);
 
-        System.out.println(c.filterEventByUser("daniel hogg","elliothogg@live.com"));
+        //System.out.println(c.filterEventByUser("daniel hogg","elliothogg@live.com"));
         
-        //System.out.println(c.filterEventByDate("02/11/2020"));
+        System.out.println(c.filterEventByDate("01/11/2020"));
         
         //System.out.println(c.establishments.get(0).getEstablishmentInfo());
+        
+       
 
         
     }
