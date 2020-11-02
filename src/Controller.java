@@ -2,22 +2,41 @@ import java.util.ArrayList;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.regex.Pattern;
-
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.BufferedReader;
 public class Controller {
 
-    public ArrayList<Establishment> establishments = new ArrayList<>();
-    public ArrayList<Event> events = new ArrayList<>();
+    private ArrayList<Establishment> establishments = new ArrayList<>();
+    private ArrayList<Event> events = new ArrayList<>();
+
+
+
+    
 
     Controller()
     {
 
     }
 
-    Controller(String establishmentCSVFileURI)
+    Controller(String establishmentCSVFileURI) throws IOException
     {
+        BufferedReader csvReader = new BufferedReader(new FileReader(establishmentCSVFileURI));
+        String eachLine = "";
 
+        //this ommits the first line of the csv file
+        csvReader.readLine();
+
+        while ((eachLine = csvReader.readLine()) != null)
+        {
+        String[] array = eachLine.split(",");
+        establishments.add(new Establishment(array[0], array[1], array[2], Integer.parseInt(array[3])));
+        }
+
+        csvReader.close();
     }
+
+    
 
     public boolean addEstablishment(Establishment establishmentIn) 
     {
@@ -120,7 +139,8 @@ public class Controller {
 
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException
+        {
 
         Controller c = new Controller();
         User me = new User("Elliot Hogg", LocalDate.of(1992, 8, 8), "elliothogg@live.com", "07548377122");
@@ -142,11 +162,13 @@ public class Controller {
 
         //System.out.println(c.filterEventByUser("daniel hogg","elliothogg@live.com"));
         
-        System.out.println(c.filterEventByDate("01/11/2020"));
+        //System.out.println(c.filterEventByDate("01/11/2020"));
         
         //System.out.println(c.establishments.get(0).getEstablishmentInfo());
         
-       
+        Controller c1 = new Controller("establishments.csv");
+
+        System.out.println(c1.establishments);
 
         
     }
