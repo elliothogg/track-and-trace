@@ -86,7 +86,7 @@ public class Event {
 
     public static void main(String[] args) {
 
-        User me = new User("Elliot Hogg", LocalDate.of(1992, 8, 8), "elliothogg@live.com", "07548377122");
+        User me = new User("Elliot Hogg", "08/08/1992", "elliothogg@live.com", "07548377122");
         Establishment e1 = new Establishment("Wembley Arena", "1 Wembley Road", "WM1 4AS", 90000);
 
         Event ev1 = new Event(me, LocalDateTime.now(), 2, e1);

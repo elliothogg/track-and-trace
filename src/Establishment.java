@@ -7,7 +7,7 @@ public class Establishment {
     {
         this.name = name;
         this.firstLineAddress = firstLineAddress;
-        this.postCode = postCode;
+        this.postCode = postCode.replaceAll("\\s+",""); //removes all white spaces to allow for simpler comparisons
         this.maxOccupancy = maxOccupancy;
     }
 
@@ -32,6 +32,11 @@ public class Establishment {
     public int getMaximumOccupancy()
     {
         return this.maxOccupancy;
+    }
+
+    public String getPostCode()
+    {
+        return this.postCode;
     }
 
     @Override

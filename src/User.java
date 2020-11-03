@@ -3,17 +3,18 @@ import java.time.format.DateTimeFormatter;
 
 public class User {
 
-    private String name, email, phoneNumber;
+    private String name, email, phoneNumber, dateOfBirthString;
     private LocalDate dateOfBirth;
     private int age;
 
-    User(String name, LocalDate dateOfBirth, String email, String phoneNumber)
+    User(String name, String dateOfBirth, String email, String phoneNumber)
     {
         this.name = name;
-        this.dateOfBirth = dateOfBirth;
+        this.dateOfBirth = StringToLocalDate(dateOfBirth); //converts String to LocalDate format
+        this.dateOfBirthString = dateOfBirth;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.age = Period.between(dateOfBirth,LocalDate.now()).getYears();
+        this.age = Period.between(this.dateOfBirth,LocalDate.now()).getYears();
     }
 
     public String getName()
@@ -28,8 +29,13 @@ public class User {
 
     public String getDateOfBirthAsString()
     {
+        return this.dateOfBirthString;
+    }
+
+    public LocalDate StringToLocalDate(String DOB)
+    {
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return this.dateOfBirth.format(myFormatObj);
+        return LocalDate.parse(DOB, myFormatObj);
     }
 
     public String getEmail()
@@ -67,7 +73,7 @@ public class User {
 
     public static void main(String[] args) {
        
-        User me = new User("Elliot Hogg", LocalDate.of(1992, 8, 8), "elliothogg@live.com", "07548377122");
+        User me = new User("Elliot Hogg", "28/08/1993", "elliothogg@live.com", "07548377122");
 
 
         

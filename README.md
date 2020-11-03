@@ -122,7 +122,8 @@ You have been given the following classes:
 
 Controller
 IO
-Define the Controller class with appropriate methods and constructors
+
+### Define the Controller class with appropriate methods and constructors
 
 Controller()
 Controller(String establishmentCSVFileURI)
@@ -143,7 +144,9 @@ Some Restaurant Place,1 Queen Street,FA2 3KE,15
 Some Book Place,1 Regal Street,FA4 3KE,20
 add an Establishment object to the list of establishments, if the object already exists then return false
 add an Event object to the list of events, if the object already exists then return false
-Define the IO class with appropriate methods and constructors
+
+
+### Define the IO class with appropriate methods and constructors
 
 IO()
 
