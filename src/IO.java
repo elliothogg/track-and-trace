@@ -1,5 +1,8 @@
 import java.time.LocalDateTime;
 import java.util.Scanner;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.*;
 
 public class IO {
 
@@ -40,7 +43,7 @@ public class IO {
         
         do {
             System.out.print("Please select a menu option (1-6) (to see the options again press 7): ");
-            menuChoice = returnValidInt();
+            menuChoice = getValidInt();
 
             sc.nextLine();
             
@@ -50,54 +53,15 @@ public class IO {
                 
                 case 1:
                     System.out.println("\n*********** ADD EVENT *********\n");
-                    System.out.println("User Information:");
-                    System.out.print("\tName:");
-                    String userName = sc.nextLine();
-                    System.out.print("\tDOB:");
-                    String userDOB = sc.nextLine();
-                    System.out.print("\tEmail:");
-                    String userEmail = sc.nextLine();
-                    System.out.print("\tPhone Number:");
-                    String userPhoneNumber = sc.nextLine();
-                    
-                    System.out.print("Party Size:");
-                    int partySize = sc.nextInt();
-                    
-                    System.out.println("Establishment Information:");
-                    System.out.print("\tName:");
-                    String establishmentName = sc.nextLine();
-                    System.out.println("\tFirst Line Address:");
-                    String establishmentFirstLineAddress = sc.nextLine();
-                    System.out.println("\tPostCode: ");
-                    String establishmentPostCode = sc.nextLine();
-                    System.out.println("\tMax Occupancy: ");
-                    int maxOccupancy = sc.nextInt();
-                    
-                    
-                    c.addEvent(new Event(new User(userName, userDOB, userEmail,userPhoneNumber), 
-                                LocalDateTime.now(), partySize, 
-                                new Establishment(establishmentName, establishmentFirstLineAddress, 
-                                establishmentPostCode, maxOccupancy)));
+                    Event event = createEvent();
+                    c.addEvent(event);
+                    c.addEstablishment(event.getEstablishment());
                     break;
 
                 case 2:
                     System.out.println("\n*********** ADD ESTABLISHMENT *********\n");
                     
-                    c.addEstablishment(createEstablishment());
-                    // System.out.print("Enter Name: ");
-                    // String nameOut = sc.nextLine();
-
-                    // System.out.print("Enter First Line of Address: ");
-                    // String firstLineAddressOut = sc.nextLine();
-
-                    // System.out.print("PostCode: ");
-                    // String postCodeOut = sc.nextLine();
-                    
-                    // System.out.print("Max Occupancy: ");
-                    // int maxOccupancyOut = returnValidInt();
-
-                    // c.addEstablishment(new Establishment(nameOut, firstLineAddressOut, postCodeOut, maxOccupancyOut));
-
+                    printResultOfAddingEstablishment(c.addEstablishment(createEstablishment()));
                     break;
                 case 3:
                     
@@ -105,20 +69,20 @@ public class IO {
                          
                 
                 case 4:
-                    System.out.println("\n*********** Events *********\n");
+                    System.out.println("\n*********** EVENTS *********\n");
                     System.out.println(c.getEvents());
                     System.out.println("\n"); 
                     break;
                 
                 case 5:
-                    System.out.println("\n*********** Establishments *********\n");
+                    System.out.println("\n*********** ESTABLISHMENTS *********\n");
                     System.out.println(c.getEstablishments());
                     System.out.println("\n");
                     break;
          
                 
                 case 6:
-                    System.out.println("************ Thanks For Using ************");
+                    System.out.println("\n************ Thanks For Using ************");
                     programRunning = false;
                     break;
                 
@@ -134,7 +98,7 @@ public class IO {
     }
 
     //method for validating integers as Scanner input
-    public int returnValidInt()
+    public int getValidInt()
     {
         //while loop that continually prompts for input until an integer is received
         while (!sc.hasNextInt())
@@ -147,9 +111,29 @@ public class IO {
         return sc.nextInt();
     }
 
+    public String getValidDate()
+    {   
+        String date = sc.nextLine();
+        try
+        {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate realDate = LocalDate.parse(date, formatter);
+        LocalDate todaysDate = LocalDate.now();
+        if (realDate.isAfter(todaysDate))
+        {
+            return getValidDate();
+        }
+        else return date;
+        }
+        catch (DateTimeParseException e)
+        {
+        return getValidDate();
+        }
+    }
+
     public Establishment createEstablishment()
     {
-        System.out.println("Establishment Information: \n");
+        System.out.println("\nEstablishment Information: \n");
         System.out.print("\tName: ");
         String establishmentName = sc.nextLine();
         System.out.print("\tFirst Line Address: ");
@@ -157,11 +141,63 @@ public class IO {
         System.out.print("\tPostCode: ");
         String establishmentPostCode = sc.nextLine();
         System.out.print("\tMax Occupancy: ");
-        int maxOccupancy = sc.nextInt();
+        int maxOccupancy = getValidInt();
+        sc.nextLine(); // Read the leftover new line
 
         return new Establishment(establishmentName, establishmentFirstLineAddress, 
         establishmentPostCode, maxOccupancy);
-}
+    }
+
+    public User createUser()
+    {
+        System.out.println("\tUser Information:\n");
+        System.out.print("\tName: ");
+        String userName = sc.nextLine();
+        System.out.print("\tDOB: ");
+        String userDOB = sc.nextLine();
+        System.out.print("\tEmail: ");
+        String userEmail = sc.nextLine();
+        System.out.print("\tPhone Number: ");
+        String userPhoneNumber = sc.nextLine();
+
+        return new User(userName, userDOB, userEmail, userPhoneNumber);
+    }
+
+    public Event createEvent()
+    {
+        System.out.print("Event Information:\n\n");
+        
+        User user = createUser();
+        
+        System.out.print("\nParty Size: ");
+        int partySize = getValidInt();
+        sc.nextLine(); // Read the leftover new line
+
+        Establishment establishment = createEstablishment();
+
+        return new Event(user, LocalDateTime.now(), partySize, establishment);
+    }
+
+    public void printResultOfAddingEstablishment(Boolean result)
+    {
+    if (result)
+    {
+        System.out.println("\nSucess! Establishment added to DB.\n");
+    }
+    else System.out.println("\nError! Establishment with that Name & PostCode already exists!\n" +
+                            "Select option 5 to view all stored Establishments.\n");
+    }
+
+    public void printResultOfAddingEvent(Boolean result)
+    {
+    if (result)
+    {
+        System.out.println("\nSucess! Event added to DB.\n");
+    }
+    else System.out.println("\nError! Event already exists!\n" +
+                            "Select option 4 to view all stored Establishments.\n");
+    }
+
 
     public void run()
     {

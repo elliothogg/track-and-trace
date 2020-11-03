@@ -37,7 +37,7 @@ public class Controller {
         //Compares all existing Establishments "Name" & "PostCode" with the Establishment being added to ensure its unique
         for (Establishment e : this.establishments)
         {
-            if (establishmentIn.getName() == e.getName() || establishmentIn.getPostCode() == e.getPostCode())
+            if (establishmentIn.getName().equalsIgnoreCase(e.getName()) && establishmentIn.getPostCode().equalsIgnoreCase(e.getPostCode()))
             {
                 return false;
             }
@@ -181,7 +181,7 @@ public class Controller {
         Controller c1 = new Controller();
         
         Establishment e1 = new Establishment("Some Coffee House", "1 King Street", "FA1 3KE", 5);
-        Establishment e2 = new Establishment("Some Coffee House", "1 King Street", "FA14KE", 90000);
+        Establishment e2 = new Establishment("Some Coffee HOUSE", "1 King Street", "fa1 3ke", 90000);
         
         System.out.println(c1.addEstablishment(e1));
         System.out.println(c1.addEstablishment(e2));
