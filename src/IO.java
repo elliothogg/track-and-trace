@@ -23,14 +23,14 @@ public class IO {
 
     public void printFilterMenuOptions()
     {
-        System.out.println("*********** MENU *********" + "\n" +
+        System.out.println("\n*********** FILTERS *********" + "\n\n" +
         "1. Filter Records by Establishment" + "\n" +
         "2. Filter Records by Date" + "\n" +
         "3. Filter Records by Name & Email" + "\n" +
         "4. Return to Main Menu\n");
     }
     
-    public void runMenu()
+    public void runMainMenu()
     {
         Controller c = new Controller();
        
@@ -49,8 +49,7 @@ public class IO {
             
            
             switch(menuChoice)
-            {
-                
+            {                 
                 case 1:
                     System.out.println("\n*********** ADD EVENT *********\n");
                     Event event = createEvent();
@@ -64,7 +63,7 @@ public class IO {
                     printResultOfAddingEstablishment(c.addEstablishment(createEstablishment()));
                     break;
                 case 3:
-                    
+                    runFilterMenu(c);
                     break;
                          
                 
@@ -97,6 +96,69 @@ public class IO {
                 } while (programRunning);        
     }
 
+    public void runFilterMenu(Controller controllerIn)
+    {
+    
+        boolean filterMenuRunning= true;
+        int menuChoice;
+        
+        printFilterMenuOptions();
+        
+        do {
+            System.out.print("Please select a menu option (1-4) (to see the options again press 5): ");
+            menuChoice = getValidInt();
+
+            sc.nextLine();
+            
+            
+            switch(menuChoice)   
+            {
+
+                case 1:
+                    System.out.println("\n*********** RECORDS BY ESTABLISHMENT *********\n");
+                    System.out.print("Enter Establishment Name: ");
+                    String establishmentName = sc.nextLine();
+                    System.out.println(controllerIn.filterEventByEstablishment(establishmentName));
+                    System.out.println("\n");
+                
+                break;
+
+                case 2:
+                    System.out.println("\n*********** RECORDS BY DATE *********\n");
+                    System.out.print("\tEnter Event Date: ");
+                    String eventDate = getValidDate();
+                    System.out.println("\n");
+                    System.out.println(controllerIn.filterEventByDate(eventDate));
+                    System.out.println("\n");
+                    break;
+                case 3:
+                    System.out.println("\n*********** RECORDS BY USER NAME & EMAIL *********\n");
+                    System.out.print("\tEnter Users Name: ");
+                    String userName = sc.nextLine();
+                    System.out.print("\tEnter Users Email: ");
+                    String userEmail = getValidEmail();
+                    System.out.println("\n");
+                    System.out.println(controllerIn.filterEventByUser(userName, userEmail));
+                    System.out.println("\n");
+                    break;
+                        
+                
+                case 4:
+                    printMainMenuOptions();
+                    filterMenuRunning = false;
+                    break;
+
+                case 5:
+                    printFilterMenuOptions();
+                    break;
+                    
+                default:
+                    System.err.print("Please choose a valid option! ");
+                    break;
+                    }
+                } while (filterMenuRunning);     
+    }
+
     //method for validating integers as Scanner input
     public int getValidInt()
     {
@@ -111,7 +173,7 @@ public class IO {
         return sc.nextInt();
     }
 
-    public String getValidDOB()
+    public String getValidDate()
     {   
         String date = sc.nextLine();
         try
@@ -121,15 +183,15 @@ public class IO {
         LocalDate todaysDate = LocalDate.now();
         if (realDate.isAfter(todaysDate))
         {
-            System.out.print("\tDate must be in past! DOB (Format dd/MM/yyyy): ");
-            return getValidDOB();
+            System.out.print("\tDate cannot be in future! (Format dd/MM/yyyy): ");
+            return getValidDate();
         }
         else return date;
     }   
         catch (DateTimeParseException e)
         {
-        System.out.print("\tInvalid input/format! DOB (Format dd/MM/yyyy): ");
-        return getValidDOB();
+        System.out.print("\tInvalid input/format! (Format dd/MM/yyyy): ");
+        return getValidDate();
         }
     }
 
@@ -186,7 +248,7 @@ public class IO {
         System.out.print("\tName: ");
         String userName = sc.nextLine();
         System.out.print("\tDOB (Format dd/MM/yyyy): ");
-        String userDOB = getValidDOB();
+        String userDOB = getValidDate();
         System.out.print("\tEmail: ");
         String userEmail = getValidEmail();
         System.out.print("\tPhone Number: ");
@@ -237,7 +299,7 @@ public class IO {
     public void run()
     {
         
-        runMenu();
+        runMainMenu();
     
         
     }

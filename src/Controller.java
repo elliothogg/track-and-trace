@@ -84,10 +84,6 @@ public class Controller {
 
     public ArrayList<Event> filterEventByDate(String date)
     {   
-        if (!isValidDate(date))
-        {
-            throw new IllegalArgumentException("Date must be in format \"dd/MM/yyyy\" and must not be in the future!");
-        }
         ArrayList<Event> filteredEvents = new ArrayList<>();
         for (int i = 0; i < events.size(); i ++)
         {
@@ -102,14 +98,6 @@ public class Controller {
 
     public ArrayList<Event> filterEventByUser(String name, String email)
     {
-        if (!isValidName(name))
-        {
-            throw new IllegalArgumentException("Name must only contain \"A-z\" & \"-\" ");
-        }
-        else if (!isValidEmail(email))
-        {
-            throw new IllegalArgumentException("Email must be valid email");    
-        }
         ArrayList<Event> filteredEvents = new ArrayList<>();
         for (int i = 0; i < events.size(); i ++)
         {
@@ -156,12 +144,11 @@ public class Controller {
 
     public static void main(String[] args) throws IOException
         {
-        // Controller c = new Controller();
-        // User me = new User("Elliot Hogg", LocalDate.of(1992, 8, 8), "elliothogg@live.com", "07548377122");
+        Controller c = new Controller();
+        User me = new User("Elliot Hogg", "08/08/1992", "elliothogg@live.com", "07548377122");
         // User me1 = new User("Daniel Hogg", LocalDate.of(1990, 8, 8), "elliothogg@live.com", "07548377122");
         // Establishment e3 = new Establishment("Millenium Stadium", "1 Wembley Road", "WM1 4AS", 90000);
         
-        // Event e = new Event(me,LocalDateTime.of(2020, 11, 01, 12, 12, 12), 2, e1);
         // Event ev1 = new Event(me1,LocalDateTime.now(), 2, e2);
         // Event ev2 = new Event(me,LocalDateTime.now(), 2, e3);
         
@@ -183,10 +170,15 @@ public class Controller {
         Establishment e1 = new Establishment("Some Coffee House", "1 King Street", "FA1 3KE", 5);
         Establishment e2 = new Establishment("Some Coffee HOUSE", "1 King Street", "fa1 3ke", 90000);
         
+        Event e = new Event(me,LocalDateTime.now(), 2, e1);
+        
         System.out.println(c1.addEstablishment(e1));
         System.out.println(c1.addEstablishment(e2));
+        c1.addEvent(e);
         
-        System.out.println(c1.getEstablishments());
+        System.out.println(c1.getEvents());
+        System.out.println(c1.filterEventByDate("03/11/2020"));
+        ;
 
     
     }
