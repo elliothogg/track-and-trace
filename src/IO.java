@@ -54,8 +54,8 @@ public class IO {
                 case 1:
                     System.out.println("\n*********** ADD EVENT *********\n");
                     Event event = createEvent();
-                    c.addEvent(event);
-                    c.addEstablishment(event.getEstablishment());
+                    printResultOfAddingEvent(c.addEvent(event), c.addEstablishment(event.getEstablishment()));
+                    
                     break;
 
                 case 2:
@@ -111,7 +111,7 @@ public class IO {
         return sc.nextInt();
     }
 
-    public String getValidDate()
+    public String getValidDOB()
     {   
         String date = sc.nextLine();
         try
@@ -121,13 +121,45 @@ public class IO {
         LocalDate todaysDate = LocalDate.now();
         if (realDate.isAfter(todaysDate))
         {
-            return getValidDate();
+            System.out.print("\tDate must be in past! DOB (Format dd/MM/yyyy): ");
+            return getValidDOB();
         }
         else return date;
-        }
+    }   
         catch (DateTimeParseException e)
         {
-        return getValidDate();
+        System.out.print("\tInvalid input/format! DOB (Format dd/MM/yyyy): ");
+        return getValidDOB();
+        }
+    }
+
+    public String getValidEmail()
+    {
+        String email = sc.nextLine();
+
+        if (email.matches(".*@.*\\..*"))
+        {
+            return email;
+        }
+        else 
+        {
+            System.out.print("\tInvalid input! Email: ");
+            return getValidEmail();
+        }
+    }
+
+    public String getValidPhoneNumber()
+    {
+        String mobileNumber = sc.nextLine();
+
+        if (mobileNumber.matches("[0-9]{11}"))
+        {
+            return mobileNumber;
+        }
+        else 
+        {
+            System.out.print("\tInvalid input! Must be a UK Mobile Number (11 numbers long). Phone Number: ");
+            return getValidPhoneNumber();
         }
     }
 
@@ -153,12 +185,12 @@ public class IO {
         System.out.println("\tUser Information:\n");
         System.out.print("\tName: ");
         String userName = sc.nextLine();
-        System.out.print("\tDOB: ");
-        String userDOB = sc.nextLine();
+        System.out.print("\tDOB (Format dd/MM/yyyy): ");
+        String userDOB = getValidDOB();
         System.out.print("\tEmail: ");
-        String userEmail = sc.nextLine();
+        String userEmail = getValidEmail();
         System.out.print("\tPhone Number: ");
-        String userPhoneNumber = sc.nextLine();
+        String userPhoneNumber = getValidPhoneNumber();
 
         return new User(userName, userDOB, userEmail, userPhoneNumber);
     }
@@ -188,14 +220,17 @@ public class IO {
                             "Select option 5 to view all stored Establishments.\n");
     }
 
-    public void printResultOfAddingEvent(Boolean result)
+    public void printResultOfAddingEvent(Boolean... result)
     {
-    if (result)
+    if (result[0] && result[1])
     {
-        System.out.println("\nSucess! Event added to DB.\n");
+        System.out.println("\nSucess! Event & Establishment added to DB.\n");
     }
-    else System.out.println("\nError! Event already exists!\n" +
-                            "Select option 4 to view all stored Establishments.\n");
+    else if (result[0] && !result[1])
+    {
+        System.out.println("\nSucess! Event added to DB! (Establishment already exists)\n");
+    } 
+    else System.out.println("\nError! Event already exists!");
     }
 
 
