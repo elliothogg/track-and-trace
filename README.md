@@ -169,11 +169,13 @@ a command line program that takes in numerical user input to select options in a
 4. Print Events
 5. Print Establishments
 6. Exit the program
-check for valid input:
-check that a date of birth is not in the future
-check for a valid email string by inclusion of @ symbol
-check for valid number of 11 characters long and doesn’t include international calling codes
-main method which does the following:
+
+### check for valid input:
+- check that a date of birth is not in the future
+- check for a valid email string by inclusion of @ symbol
+- check for valid number of 11 characters long and doesn’t include         international calling codes
+
+### main method which does the following:
 creates a new instance of IO and runs the program as normal
 creates a new instance of IO and runs a debug method
 debug method. This method should include the following examples of basic testing of your program:

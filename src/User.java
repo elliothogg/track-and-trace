@@ -3,9 +3,11 @@ import java.time.format.DateTimeFormatter;
 
 public class User {
 
+
     private String name, email, phoneNumber, dateOfBirthString;
     private LocalDate dateOfBirth;
     private int age;
+
 
     User(String name, String dateOfBirth, String email, String phoneNumber)
     {
@@ -17,20 +19,6 @@ public class User {
         this.age = Period.between(this.dateOfBirth,LocalDate.now()).getYears();
     }
 
-    public String getName()
-    {
-        return this.name;
-    }
-
-    public LocalDate getDateOfBirth()
-    {
-        return this.dateOfBirth;
-    }
-
-    public String getDateOfBirthAsString()
-    {
-        return this.dateOfBirthString;
-    }
 
     public LocalDate StringToLocalDate(String DOB)
     {
@@ -38,20 +26,42 @@ public class User {
         return LocalDate.parse(DOB, myFormatObj);
     }
 
+
+    public String getName()
+    {
+        return this.name;
+    }
+
+
+    public LocalDate getDateOfBirth()
+    {
+        return this.dateOfBirth;
+    }
+
+
+    public String getDateOfBirthAsString()
+    {
+        return this.dateOfBirthString;
+    }
+
+
     public String getEmail()
     {
         return this.email;
     }
+
 
     public String getPhoneNumber()
     {
         return this.phoneNumber;
     }
 
+
     public int getAge()
     {
         return this.age;
     }
+
 
     @Override
     public String toString()
@@ -60,10 +70,12 @@ public class User {
                 ", phoneNumber=" + phoneNumber + ", age=" + age + "]";
     }
 
+
     public String getNameAndNumber()
     {
         return name + " | Contact Number " + phoneNumber;
     }
+
 
     public String getUserInfo()
     {
@@ -71,6 +83,7 @@ public class User {
                             name, getDateOfBirthAsString(), email, phoneNumber, age);
     }
 
+    
     public static void main(String[] args) {
        
         User me = new User("Elliot Hogg", "28/08/1993", "elliothogg@live.com", "07548377122");

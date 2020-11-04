@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -7,12 +6,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.BufferedReader;
 
+
 public class Controller {
+
 
     private ArrayList<Establishment> establishments = new ArrayList<>();
     private ArrayList<Event> events = new ArrayList<>();
 
-    Controller(){}
+
+    Controller() {} 
+
 
     Controller(String establishmentCSVFileURI) throws IOException
     {
@@ -46,7 +49,6 @@ public class Controller {
     }
 
 
-
     public boolean addEvent(Event eventIn) 
     {
         if (events.contains(eventIn)) 
@@ -62,13 +64,14 @@ public class Controller {
         return this.establishments;
     }
 
+
     public ArrayList<Event> getEvents()
     {
         return this.events;
     }
 
 
-    public ArrayList<Event> filterEventByEstablishment(String establishmentName)
+    public ArrayList<Event> filterEventsByEstablishment(String establishmentName)
     {
         ArrayList<Event> filteredEvents = new ArrayList<>();
         for (int i = 0; i < events.size(); i ++)
@@ -82,7 +85,7 @@ public class Controller {
     }
 
 
-    public ArrayList<Event> filterEventByDate(String date)
+    public ArrayList<Event> filterEventsByDate(String date)
     {   
         ArrayList<Event> filteredEvents = new ArrayList<>();
         for (int i = 0; i < events.size(); i ++)
@@ -96,7 +99,7 @@ public class Controller {
     }
 
 
-    public ArrayList<Event> filterEventByUser(String name, String email)
+    public ArrayList<Event> filterEventsByUser(String name, String email)
     {
         ArrayList<Event> filteredEvents = new ArrayList<>();
         for (int i = 0; i < events.size(); i ++)
@@ -142,6 +145,7 @@ public class Controller {
         }
     }
 
+
     public static void main(String[] args) throws IOException
         {
         Controller c = new Controller();
@@ -159,9 +163,9 @@ public class Controller {
         // c.addEstablishment(e2);
         // c.addEstablishment(e3);
         
-        //System.out.println(c.filterEventByUser("daniel hogg","elliothogg@live.com"));
+        //System.out.println(c.filterEventsByUser("daniel hogg","elliothogg@live.com"));
         
-        //System.out.println(c.filterEventByDate("01/11/2020"));
+        //System.out.println(c.filterEventsByDate("01/11/2020"));
         
         //System.out.println(c.establishments.get(0).getEstablishmentInfo());
         
@@ -177,7 +181,7 @@ public class Controller {
         c1.addEvent(e);
         
         System.out.println(c1.getEvents());
-        System.out.println(c1.filterEventByDate("03/11/2020"));
+        System.out.println(c1.filterEventsByDate("03/11/2020"));
         ;
 
     

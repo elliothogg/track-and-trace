@@ -3,11 +3,13 @@ import java.time.format.DateTimeFormatter;
 
 public class Event {
 
+    
     private User user;
     private LocalDate eventDate;
     private LocalTime eventTime;
     private int partyNumber;
     private Establishment establishment;
+
 
     Event(User user, LocalDateTime date, int partyNumber, Establishment establishment)
     {
@@ -18,6 +20,7 @@ public class Event {
         this.establishment = establishment;
     }
 
+
     Event(User user, int partyNumber, Establishment establishment)
     {
         this.user = user;
@@ -25,15 +28,18 @@ public class Event {
         this.establishment = establishment;
     }
 
+
     public User getUser()
     {
         return this.user;
     }
 
+
     public LocalDate getEventDate()
     {
         return this.eventDate;
     }
+
 
     public String getEventDateAsString()
     {
@@ -41,10 +47,12 @@ public class Event {
         return this.eventDate.format(myFormatObj);
     }
 
+
     public LocalTime getEventTime()
     {
         return this.eventTime;
     }
+
 
     public String getEventTimeAsString()
     {
@@ -52,15 +60,18 @@ public class Event {
         return this.eventTime.format(myFormatObj);
     }
 
+
     public int getPartyNumber()
     {
         return this.partyNumber;
     }
 
+
     public Establishment getEstablishment()
     {
         return this.establishment;
     }
+
 
     @Override
     public String toString()
@@ -69,12 +80,6 @@ public class Event {
                 ", partyNumber=" + partyNumber + ", establishment=" + establishment + "]";
     }
 
-/*     public String getEventInfo()
-    {
-        return user.getUserInfo() + "\nDate " + getEventDateAsString() + "\nTime " + getEventTimeAsString() +
-                "\nParty Size " + partyNumber + "\nEstablishment \n\t" + establishment.getEstablishmentInfo();
-    } */
-    
     
     public String getEventInfo()
     {

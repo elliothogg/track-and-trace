@@ -3,43 +3,43 @@ import java.util.Scanner;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.*;
+import java.util.ArrayList;
+import java.io.IOException;
 
 public class IO {
 
-    Scanner sc = new Scanner(System.in);
+    private final Controller c = new Controller();
 
-    
+    Scanner sc = new Scanner(System.in);
 
     public void printMainMenuOptions()
     {
         System.out.println("\n" + "*********** MENU *********" + "\n\n" +
         "1. Record an Event" + "\n" +
         "2. Add Establishment" + "\n" +
-        "3. Filters" + "\n" +
+        "3. Filter Events" + "\n" +
         "4. Print Events" + "\n" +
         "5. Print Establishments" + "\n" +
         "6. Exit the Program\n");
     }
 
+
     public void printFilterMenuOptions()
     {
-        System.out.println("\n*********** FILTERS *********" + "\n\n" +
-        "1. Filter Records by Establishment" + "\n" +
-        "2. Filter Records by Date" + "\n" +
-        "3. Filter Records by Name & Email" + "\n" +
+        System.out.println("\n*********** FILTER EVENTS *********" + "\n\n" +
+        "1. Filter Events by Establishment" + "\n" +
+        "2. Filter Events by Date" + "\n" +
+        "3. Filter Events by Name & Email" + "\n" +
         "4. Return to Main Menu\n");
     }
     
+
     public void runMainMenu()
     {
-        Controller c = new Controller();
-       
-
         boolean programRunning= true;
         int menuChoice;
         
         printMainMenuOptions();
-        
         
         do {
             System.out.print("Please select a menu option (1-6) (to see the options again press 7): ");
@@ -47,7 +47,6 @@ public class IO {
 
             sc.nextLine();
             
-           
             switch(menuChoice)
             {                 
                 case 1:
@@ -62,21 +61,43 @@ public class IO {
                     
                     printResultOfAddingEstablishment(c.addEstablishment(createEstablishment()));
                     break;
+
                 case 3:
-                    runFilterMenu(c);
+                    if (isEventsArrayEmpty())
+                    {
+                        System.out.println("\n*********** Error - Cannot Apply Filters as there are no registered Events ***********\n");
+                    }
+                    else runFilterMenu(c);
                     break;
                          
-                
                 case 4:
                     System.out.println("\n*********** EVENTS *********\n");
-                    System.out.println(c.getEvents());
-                    System.out.println("\n"); 
+                    if (isEventsArrayEmpty())
+                    {
+                        System.out.println("There are no registered Events.\n");
+                    }
+                    else
+                    {
+                        eventPrinter(c.getEvents());
+                    }
                     break;
                 
                 case 5:
                     System.out.println("\n*********** ESTABLISHMENTS *********\n");
-                    System.out.println(c.getEstablishments());
-                    System.out.println("\n");
+                    if (isEstablishmentsArrayEmpty())
+                    {
+                        System.out.println("There are no registered Establishments\n");
+                    }
+                    else
+                    {
+                        for (int i = 0; i < c.getEstablishments().size(); i++)
+                        {
+                            System.out.println(c.getEstablishments().get(i).getEstablishmentInfo());
+                            System.out.println();
+                            System.out.println();
+                        }
+                        System.out.println();
+                    }
                     break;
          
                 
@@ -96,9 +117,21 @@ public class IO {
                 } while (programRunning);        
     }
 
+
+    public void eventPrinter(ArrayList<Event> events)
+    {
+        for (int i = 0; i < events.size(); i++)
+        {
+            System.out.println("Event ID: 1638925269 | Recorded User");
+            System.out.println(events.get(i).getEventInfo());
+            System.out.println(); 
+            System.out.println(); 
+        }
+    }
+    
+
     public void runFilterMenu(Controller controllerIn)
     {
-    
         boolean filterMenuRunning= true;
         int menuChoice;
         
@@ -110,39 +143,46 @@ public class IO {
 
             sc.nextLine();
             
-            
             switch(menuChoice)   
             {
-
                 case 1:
-                    System.out.println("\n*********** RECORDS BY ESTABLISHMENT *********\n");
+                    System.out.println("\n*********** EVENTS BY ESTABLISHMENT *********\n");
                     System.out.print("Enter Establishment Name: ");
                     String establishmentName = sc.nextLine();
-                    System.out.println(controllerIn.filterEventByEstablishment(establishmentName));
-                    System.out.println("\n");
-                
-                break;
+                    System.out.println();
+                    if (!controllerIn.filterEventsByEstablishment(establishmentName).isEmpty())
+                    {
+                        eventPrinter(controllerIn.filterEventsByEstablishment(establishmentName));
+                    }
+                    else System.out.println("No Events found on at the specified Establishment.\n");
+                    break;
 
                 case 2:
-                    System.out.println("\n*********** RECORDS BY DATE *********\n");
-                    System.out.print("\tEnter Event Date: ");
+                    System.out.println("\n*********** EVENTS BY DATE *********\n");
+                    System.out.print("Enter Event Date: ");
                     String eventDate = getValidDate();
-                    System.out.println("\n");
-                    System.out.println(controllerIn.filterEventByDate(eventDate));
-                    System.out.println("\n");
+                    System.out.println();
+                    if (!controllerIn.filterEventsByDate(eventDate).isEmpty())
+                    {
+                        eventPrinter(controllerIn.filterEventsByDate(eventDate));
+                    }
+                    else System.out.println("No Events found on the specified day.\n");
                     break;
+
                 case 3:
-                    System.out.println("\n*********** RECORDS BY USER NAME & EMAIL *********\n");
-                    System.out.print("\tEnter Users Name: ");
+                    System.out.println("\n*********** EVENTS BY USER NAME & EMAIL *********\n");
+                    System.out.print("Enter Users Name: ");
                     String userName = sc.nextLine();
-                    System.out.print("\tEnter Users Email: ");
+                    System.out.print("Enter Users Email: ");
                     String userEmail = getValidEmail();
-                    System.out.println("\n");
-                    System.out.println(controllerIn.filterEventByUser(userName, userEmail));
-                    System.out.println("\n");
+                    System.out.println();
+                    if (!controllerIn.filterEventsByUser(userName, userEmail).isEmpty())
+                    {
+                        eventPrinter(controllerIn.filterEventsByUser(userName, userEmail));
+                    }
+                    else System.out.println("No Events found under that name and email.\n");
                     break;
                         
-                
                 case 4:
                     printMainMenuOptions();
                     filterMenuRunning = false;
@@ -155,9 +195,10 @@ public class IO {
                 default:
                     System.err.print("Please choose a valid option! ");
                     break;
-                    }
-                } while (filterMenuRunning);     
+            }
+        } while (filterMenuRunning);     
     }
+
 
     //method for validating integers as Scanner input
     public int getValidInt()
@@ -173,14 +214,17 @@ public class IO {
         return sc.nextInt();
     }
 
+
     public String getValidDate()
     {   
         String date = sc.nextLine();
+
         try
         {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate realDate = LocalDate.parse(date, formatter);
         LocalDate todaysDate = LocalDate.now();
+        
         if (realDate.isAfter(todaysDate))
         {
             System.out.print("\tDate cannot be in future! (Format dd/MM/yyyy): ");
@@ -194,6 +238,7 @@ public class IO {
         return getValidDate();
         }
     }
+
 
     public String getValidEmail()
     {
@@ -210,24 +255,45 @@ public class IO {
         }
     }
 
+
     public String getValidPhoneNumber()
     {
         String mobileNumber = sc.nextLine();
 
-        if (mobileNumber.matches("[0-9]{11}"))
+        if (mobileNumber.matches("^(07)[0-9]{9}"))
         {
             return mobileNumber;
         }
         else 
         {
-            System.out.print("\tInvalid input! Must be a UK Mobile Number (11 numbers long). Phone Number: ");
+            System.out.print("\tInvalid input! Must be a UK Mobile Number (11 numbers long & start with \"07\"). Phone Number: ");
             return getValidPhoneNumber();
         }
     }
 
+    public boolean isEstablishmentsArrayEmpty()
+    {
+        if (c.getEstablishments().size() < 1)
+        {
+            return true;
+        }
+        else return false;
+    }
+
+    
+    public boolean isEventsArrayEmpty()
+    {
+        if (c.getEvents().size() < 1)
+        {
+            return true;
+        }
+        else return false;
+    }
+
+
     public Establishment createEstablishment()
     {
-        System.out.println("\nEstablishment Information: \n");
+        System.out.println("Establishment Information: \n");
         System.out.print("\tName: ");
         String establishmentName = sc.nextLine();
         System.out.print("\tFirst Line Address: ");
@@ -242,9 +308,10 @@ public class IO {
         establishmentPostCode, maxOccupancy);
     }
 
+
     public User createUser()
     {
-        System.out.println("\tUser Information:\n");
+        System.out.println("User Information:\n");
         System.out.print("\tName: ");
         String userName = sc.nextLine();
         System.out.print("\tDOB (Format dd/MM/yyyy): ");
@@ -257,20 +324,21 @@ public class IO {
         return new User(userName, userDOB, userEmail, userPhoneNumber);
     }
 
+
     public Event createEvent()
     {
-        System.out.print("Event Information:\n\n");
-        
         User user = createUser();
         
         System.out.print("\nParty Size: ");
         int partySize = getValidInt();
+        System.out.println();
         sc.nextLine(); // Read the leftover new line
 
         Establishment establishment = createEstablishment();
 
         return new Event(user, LocalDateTime.now(), partySize, establishment);
     }
+
 
     public void printResultOfAddingEstablishment(Boolean result)
     {
@@ -282,6 +350,7 @@ public class IO {
                             "Select option 5 to view all stored Establishments.\n");
     }
 
+
     public void printResultOfAddingEvent(Boolean... result)
     {
     if (result[0] && result[1])
@@ -290,24 +359,43 @@ public class IO {
     }
     else if (result[0] && !result[1])
     {
-        System.out.println("\nSucess! Event added to DB! (Establishment already exists)\n");
+        System.out.println("\nSucess! Event added to DB! (Establishment already exists).\n");
     } 
     else System.out.println("\nError! Event already exists!");
     }
 
 
-    public void run()
-    {
-        
+    public void runProgram()
+    {    
         runMainMenu();
-    
-        
     }
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) throws IOException  {
 
         IO io1 = new IO();
 
-        io1.run();
+        
+
+        User me = new User("Elliot Hogg", "08/08/1992", "elliothogg@live.com", "07548377122");
+        User me1 = new User("Daniel", "08/08/1992", "Daniel@live.com", "07548377122");
+        Establishment e1 = new Establishment("elli", "sdfsf", "FA1 d3KE", 5);
+        Establishment e2 = new Establishment("eyll", "Street", "FA1 3KE", 5);
+        Establishment e3 = new Establishment("ellf", "1 King", "FA1 ds3KE", 5);
+        Event e = new Event(me,LocalDateTime.of(2020, 11, 02, 12, 12, 12), 2, e1);
+        Event d = new Event(me1,LocalDateTime.now(), 4, e1);
+        Event f = new Event(me,LocalDateTime.now(), 4, e2);
+        Event g = new Event(me1,LocalDateTime.now(), 4, e3);
+        
+        
+
+        io1.c.addEvent(e);
+        io1.c.addEvent(d);
+        io1.c.addEvent(f);
+        io1.c.addEvent(g);
+        io1.c.addEstablishment(e1);
+        io1.c.addEstablishment(e2);
+        io1.c.addEstablishment(e3);
+        
+        io1.runProgram();
     }
 }

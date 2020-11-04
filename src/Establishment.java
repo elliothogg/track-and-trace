@@ -1,7 +1,9 @@
 public class Establishment {
 
+
     private String name, firstLineAddress, postCode;
     private int maxOccupancy;
+
 
     Establishment(String name, String firstLineAddress, String postCode, int maxOccupancy)
     {
@@ -11,6 +13,7 @@ public class Establishment {
         this.maxOccupancy = maxOccupancy;
     }
 
+
     Establishment(String name, String[] address, int maxOccupancy)
     {
         this.name = name;
@@ -19,25 +22,30 @@ public class Establishment {
         this.maxOccupancy = maxOccupancy;
     }
 
+
     public String getName()
     {
         return this.name;
     }
+
 
     public String getAddress()
     {
         return this.firstLineAddress + " " + this.postCode;
     }
 
+
     public int getMaximumOccupancy()
     {
         return this.maxOccupancy;
     }
 
+
     public String getPostCode()
     {
         return this.postCode;
     }
+
 
     @Override
     public String toString()
@@ -46,6 +54,7 @@ public class Establishment {
                                 postCode + ", maximumOccupancy=" + maxOccupancy + "]";
     }
 
+    
     public String getEstablishmentInfo()
     {
         return String.format("Name: %s\nAddress: %s %s", name, firstLineAddress, postCode);
