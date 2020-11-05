@@ -221,14 +221,15 @@ you are also required to expand the IO class to allow for extended menu function
 
 ## Coursework Report
 
-Produce a 500 word report outlining the following reflective practice:
+### Produce a 500 word report outlining the following reflective practice:
 
-brief explanation of the system
-what were you thinking and feeling before you started the coursework but after reading the specification
-description of what went well and what went wrong
-what could you have done better in hindsight
-if you were given the problem again, what would you do differently
-You are to write this using markdown and include this file inside your project. It should be called reflective-report.md
+- brief explanation of the system
+
+- what were you thinking and feeling before you started the coursework but after reading the specification
+  description of what went well and what went wrong
+- what could you have done better in hindsight
+  if you were given the problem again, what would you do differently
+- You are to write this using markdown and include this file inside your project. It should be called    reflective-report.md
 
 
 # Heading 1

@@ -8,7 +8,31 @@ import java.io.IOException;
 
 public class IO {
 
-    private final Controller c = new Controller();
+    private final Controller c;
+    
+    private final Controller c1;
+
+
+    IO()
+    {
+        this.c = new Controller();
+        this.c1 = null;
+    }
+
+    IO(String establishmentCSVFileURI) throws IOException
+    {
+        this.c = new Controller();
+        this.c1 = new Controller("src/establishments.csv"); //neaten it up - 
+        addCSVToDB();
+    }
+
+    public void addCSVToDB()
+    {
+        for (int i = 0; i < c1.getEstablishments().size(); i++)
+        {
+            c.addEstablishment(c1.getEstablishments().get(i));
+        }
+    }
 
     Scanner sc = new Scanner(System.in);
 
@@ -370,12 +394,8 @@ public class IO {
         runMainMenu();
     }
 
-    public static void main(String[] args) throws IOException  {
-
-        IO io1 = new IO();
-
-        
-
+    public void debugMethod()
+    {
         User me = new User("Elliot Hogg", "08/08/1992", "elliothogg@live.com", "07548377122");
         User me1 = new User("Daniel", "08/08/1992", "Daniel@live.com", "07548377122");
         Establishment e1 = new Establishment("elli", "sdfsf", "FA1 d3KE", 5);
@@ -386,16 +406,38 @@ public class IO {
         Event f = new Event(me,LocalDateTime.now(), 4, e2);
         Event g = new Event(me1,LocalDateTime.now(), 4, e3);
         
+        //declare some objects that would fail - 12 number phones etc 
+
+        //object decs that have erronious params - String where int is needed 
+
+        //boundary - can establishmnet have 0 for max occupancy or -1.  number in event party
+
+        //exreme - null in place of String
+
+        c.addEvent(e);
+        c.addEvent(d);
+        c.addEvent(f);
+        c.addEvent(g);
+        c.addEstablishment(e1);
+        c.addEstablishment(e2);
+        c.addEstablishment(e3);
+
+        runProgram();
+    }
+
+    public static void main(String[] args) throws IOException
+    {
+
+        new IO().debugMethod();
+
+        //new IO().runProgram();
+
+        //new IO("src/establishments.csv").runProgram(); // create an IO object and add a csv file (which is automatically added to ArrayList)
+
         
 
-        io1.c.addEvent(e);
-        io1.c.addEvent(d);
-        io1.c.addEvent(f);
-        io1.c.addEvent(g);
-        io1.c.addEstablishment(e1);
-        io1.c.addEstablishment(e2);
-        io1.c.addEstablishment(e3);
         
-        io1.runProgram();
+        
+        
     }
 }

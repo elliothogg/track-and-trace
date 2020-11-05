@@ -149,6 +149,13 @@ public class Controller {
     public static void main(String[] args) throws IOException
         {
         Controller c = new Controller();
+        
+        Controller c1 = new Controller("src/establishments.csv");
+
+        System.out.println(c1.getEstablishments());
+
+
+
         User me = new User("Elliot Hogg", "08/08/1992", "elliothogg@live.com", "07548377122");
         // User me1 = new User("Daniel Hogg", LocalDate.of(1990, 8, 8), "elliothogg@live.com", "07548377122");
         // Establishment e3 = new Establishment("Millenium Stadium", "1 Wembley Road", "WM1 4AS", 90000);
@@ -167,22 +174,22 @@ public class Controller {
         
         //System.out.println(c.filterEventsByDate("01/11/2020"));
         
-        //System.out.println(c.establishments.get(0).getEstablishmentInfo());
+        // System.out.println(c.establishments.get(0).getEstablishmentInfo());
         
-        Controller c1 = new Controller();
+        // Controller c1 = new Controller();
         
-        Establishment e1 = new Establishment("Some Coffee House", "1 King Street", "FA1 3KE", 5);
-        Establishment e2 = new Establishment("Some Coffee HOUSE", "1 King Street", "fa1 3ke", 90000);
+        // Establishment e1 = new Establishment("Some Coffee House", "1 King Street", "FA1 3KE", 5);
+        // Establishment e2 = new Establishment("Some Coffee HOUSE", "1 King Street", "fa1 3ke", 90000);
         
-        Event e = new Event(me,LocalDateTime.now(), 2, e1);
+        // Event e = new Event(me,LocalDateTime.now(), 2, e1);
         
-        System.out.println(c1.addEstablishment(e1));
-        System.out.println(c1.addEstablishment(e2));
-        c1.addEvent(e);
+        // System.out.println(c1.addEstablishment(e1));
+        // System.out.println(c1.addEstablishment(e2));
+        // c1.addEvent(e);
         
-        System.out.println(c1.getEvents());
-        System.out.println(c1.filterEventsByDate("03/11/2020"));
-        ;
+        // System.out.println(c1.getEvents());
+        // System.out.println(c1.filterEventsByDate("03/11/2020"));
+        // ;
 
     
     }
