@@ -1,3 +1,14 @@
+/*
+ * This class is used to store, retrieve, and filter events and establishments (duplicate data cannot occur).
+ * CSV establishment data can also be parsed and stored.
+ * 
+ * This project was written as a University project.
+ * 
+ * @author	Elliot Hogg
+ * @version 1.11  (07 Nov 2020)
+ * 
+ */
+
 import java.util.ArrayList;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -6,29 +17,29 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.BufferedReader;
 
-
 public class Controller {
 
-
+    //ArrayLists to store lists of Establishments & Events
     private ArrayList<Establishment> establishments = new ArrayList<>();
     private ArrayList<Event> events = new ArrayList<>();
 
-
     Controller() {} 
 
-
+    //This constructer allows a CSV file to be parsed into establishments ArrayList
     Controller(String establishmentCSVFileURI) throws IOException
     {
+        //Create a reader and pass in the file path parameter
         BufferedReader csvReader = new BufferedReader(new FileReader(establishmentCSVFileURI));
         String eachLine = "";
 
         //this ommits the first line of the csv file
         csvReader.readLine();
 
+        //loop through each line, split Stings by ",", and create an Establishment object
         while ((eachLine = csvReader.readLine()) != null)
         {
-        String[] array = eachLine.split(",");
-        establishments.add(new Establishment(array[0], array[1], array[2], Integer.parseInt(array[3])));
+            String[] array = eachLine.split(",");
+            establishments.add(new Establishment(array[0], array[1], array[2], Integer.parseInt(array[3])));
         }
 
         csvReader.close();
@@ -113,48 +124,37 @@ public class Controller {
         return filteredEvents;
     }
 
-
-    public boolean isValidName(String name)
-    {
-        return name.matches("^[ A-Za-z-]+$");
-    }
-
-
-    public boolean isValidEmail(String email)
-    {
-        return email.matches(".*@.*\\..*");
-    }
-
-
+    //Checks that date is not in future and can be parsed into LocalDate format
     public boolean isValidDate(String date)
     {   
         try
         {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate realDate = LocalDate.parse(date, formatter);
-        LocalDate todaysDate = LocalDate.now();
-        if (realDate.isAfter(todaysDate))
-        {
-            return false;
-        }
-        else return true;
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate realDate = LocalDate.parse(date, formatter);
+            LocalDate todaysDate = LocalDate.now();
+            if (realDate.isAfter(todaysDate))
+            {
+                return false;
+            }
+            else return true;
         }
         catch (DateTimeParseException e)
         {
-        return false;
+            return false;
         }
     }
 
 
     public static void main(String[] args) throws IOException
         {
+
+        //some very simple manual unit testing (ignore)
+
         Controller c = new Controller();
         
         Controller c1 = new Controller("src/establishments.csv");
 
         System.out.println(c1.getEstablishments());
-
-
 
         User me = new User("Elliot Hogg", "08/08/1992", "elliothogg@live.com", "07548377122");
         // User me1 = new User("Daniel Hogg", LocalDate.of(1990, 8, 8), "elliothogg@live.com", "07548377122");
@@ -189,7 +189,6 @@ public class Controller {
         
         // System.out.println(c1.getEvents());
         // System.out.println(c1.filterEventsByDate("03/11/2020"));
-        // ;
 
     
     }

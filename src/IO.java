@@ -1,3 +1,16 @@
+/*
+ * This class runs the program. There is a debug method that populates the system with data to facilitate menu testing. 
+ * The debug method also features some limited testing.
+ * 
+ * CSV establishment data can be parsed and stored via a constructor.
+ * 
+ * This project was written as a University project.
+ * 
+ * @author	Elliot Hogg
+ * @version 1.11  (07 Nov 2020)
+ * 
+ */
+
 import java.time.LocalDateTime;
 import java.util.Scanner;
 import java.time.format.DateTimeFormatter;
@@ -10,31 +23,20 @@ public class IO {
 
     private final Controller c;
     
-    private final Controller c1;
 
+    Scanner sc = new Scanner(System.in);
 
     IO()
     {
         this.c = new Controller();
-        this.c1 = null;
     }
 
+    //This constructor allows CSV Establishment data to pre-populate the program "DB"
     IO(String establishmentCSVFileURI) throws IOException
     {
-        this.c = new Controller();
-        this.c1 = new Controller("src/establishments.csv"); //neaten it up - 
-        addCSVToDB();
+        this.c = new Controller(establishmentCSVFileURI);
     }
 
-    public void addCSVToDB()
-    {
-        for (int i = 0; i < c1.getEstablishments().size(); i++)
-        {
-            c.addEstablishment(c1.getEstablishments().get(i));
-        }
-    }
-
-    Scanner sc = new Scanner(System.in);
 
     public void printMainMenuOptions()
     {
@@ -67,7 +69,7 @@ public class IO {
         
         do {
             System.out.print("Please select a menu option (1-6) (to see the options again press 7): ");
-            menuChoice = getValidInt();
+            menuChoice = returnValidInt();
 
             sc.nextLine();
             
@@ -77,7 +79,6 @@ public class IO {
                     System.out.println("\n*********** ADD EVENT *********\n");
                     Event event = createEvent();
                     printResultOfAddingEvent(c.addEvent(event), c.addEstablishment(event.getEstablishment()));
-                    
                     break;
 
                 case 2:
@@ -85,7 +86,8 @@ public class IO {
                     
                     printResultOfAddingEstablishment(c.addEstablishment(createEstablishment()));
                     break;
-
+                
+                //Passes control to filterMenu
                 case 3:
                     if (isEventsArrayEmpty())
                     {
@@ -114,19 +116,12 @@ public class IO {
                     }
                     else
                     {
-                        for (int i = 0; i < c.getEstablishments().size(); i++)
-                        {
-                            System.out.println(c.getEstablishments().get(i).getEstablishmentInfo());
-                            System.out.println();
-                            System.out.println();
-                        }
-                        System.out.println();
+                        establishmentPrinter(c.getEstablishments());
                     }
                     break;
          
-                
                 case 6:
-                    System.out.println("\n************ Thanks For Using ************");
+                    System.out.println("\n************ Thanks For Using ************\n");
                     programRunning = false;
                     break;
                 
@@ -137,22 +132,10 @@ public class IO {
                 default:
                     System.err.print("Please choose a valid option! ");
                     break;
-                    }
-                } while (programRunning);        
+                }
+            } while (programRunning);        
     }
 
-
-    public void eventPrinter(ArrayList<Event> events)
-    {
-        for (int i = 0; i < events.size(); i++)
-        {
-            System.out.println("Event ID: 1638925269 | Recorded User");
-            System.out.println(events.get(i).getEventInfo());
-            System.out.println(); 
-            System.out.println(); 
-        }
-    }
-    
 
     public void runFilterMenu(Controller controllerIn)
     {
@@ -160,12 +143,12 @@ public class IO {
         int menuChoice;
         
         printFilterMenuOptions();
-        
+
         do {
             System.out.print("Please select a menu option (1-4) (to see the options again press 5): ");
-            menuChoice = getValidInt();
+            menuChoice = returnValidInt();
 
-            sc.nextLine();
+            sc.nextLine(); // Read the leftover new line 
             
             switch(menuChoice)   
             {
@@ -184,7 +167,7 @@ public class IO {
                 case 2:
                     System.out.println("\n*********** EVENTS BY DATE *********\n");
                     System.out.print("Enter Event Date: ");
-                    String eventDate = getValidDate();
+                    String eventDate = returnValidDate();
                     System.out.println();
                     if (!controllerIn.filterEventsByDate(eventDate).isEmpty())
                     {
@@ -198,7 +181,7 @@ public class IO {
                     System.out.print("Enter Users Name: ");
                     String userName = sc.nextLine();
                     System.out.print("Enter Users Email: ");
-                    String userEmail = getValidEmail();
+                    String userEmail = returnValidEmail();
                     System.out.println();
                     if (!controllerIn.filterEventsByUser(userName, userEmail).isEmpty())
                     {
@@ -206,7 +189,8 @@ public class IO {
                     }
                     else System.out.println("No Events found under that name and email.\n");
                     break;
-                        
+                
+                //Passes control back to mainMenu
                 case 4:
                     printMainMenuOptions();
                     filterMenuRunning = false;
@@ -223,51 +207,83 @@ public class IO {
         } while (filterMenuRunning);     
     }
 
-
-    //method for validating integers as Scanner input
-    public int getValidInt()
+    //Loops through all items in passed ArrayList and neatly prints them
+    public void eventPrinter(ArrayList<Event> events)
     {
-        //while loop that continually prompts for input until an integer is received
+        for (int i = 0; i < events.size(); i++)
+        {
+            System.out.println(events.get(i).getEventInfo());
+            System.out.println(); 
+            System.out.println(); 
+        }
+    }
+
+    ////Loops through all items in passed ArrayList and neatly prints them
+    public void establishmentPrinter(ArrayList<Establishment> establishments)
+    {
+        for (int i = 0; i < establishments.size(); i++)
+        {
+            System.out.println(establishments.get(i).getEstablishmentInfo());
+            System.out.println();
+            System.out.println();
+        }
+    }
+    
+    
+    public int returnPositiveInt()
+    {
+        int input = returnValidInt();
+        
+        if (input < 1)
+        {
+            System.out.print("Invalid input! Please enter a positive integer: ");
+            return returnPositiveInt();
+        }
+        return input;
+    }
+
+
+    public int returnValidInt()
+    {
         while (!sc.hasNextInt())
             {
-                System.err.print("Invalid input! Please enter an integer: ");
+                System.out.print("Invalid input! Please enter an integer: ");
                 sc.next();
             }
-
-        //returns the valid input
         return sc.nextInt();
     }
 
 
-    public String getValidDate()
+    public String returnValidDate()
     {   
         String date = sc.nextLine();
 
         try
         {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate realDate = LocalDate.parse(date, formatter);
-        LocalDate todaysDate = LocalDate.now();
-        
-        if (realDate.isAfter(todaysDate))
-        {
-            System.out.print("\tDate cannot be in future! (Format dd/MM/yyyy): ");
-            return getValidDate();
-        }
-        else return date;
-    }   
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate realDate = LocalDate.parse(date, formatter);
+            LocalDate todaysDate = LocalDate.now();
+            
+            if (realDate.isAfter(todaysDate))
+            {
+                System.out.print("\tDate cannot be in future! (Format dd/MM/yyyy): ");
+                return returnValidDate();
+            }
+            else return date;
+        }   
         catch (DateTimeParseException e)
         {
-        System.out.print("\tInvalid input/format! (Format dd/MM/yyyy): ");
-        return getValidDate();
+            System.out.print("\tInvalid input/format! (Format dd/MM/yyyy): ");
+            return returnValidDate();
         }
     }
 
 
-    public String getValidEmail()
+    public String returnValidEmail()
     {
         String email = sc.nextLine();
 
+        //Regex - String must contain 1 "@" followed by at least 1 "."
         if (email.matches(".*@.*\\..*"))
         {
             return email;
@@ -275,15 +291,16 @@ public class IO {
         else 
         {
             System.out.print("\tInvalid input! Email: ");
-            return getValidEmail();
+            return returnValidEmail();
         }
     }
 
 
-    public String getValidPhoneNumber()
+    public String returnValidPhoneNumber()
     {
         String mobileNumber = sc.nextLine();
 
+        //Regex - String must start with "07" and contain exactly 11 characters(0-9 only)
         if (mobileNumber.matches("^(07)[0-9]{9}"))
         {
             return mobileNumber;
@@ -291,9 +308,10 @@ public class IO {
         else 
         {
             System.out.print("\tInvalid input! Must be a UK Mobile Number (11 numbers long & start with \"07\"). Phone Number: ");
-            return getValidPhoneNumber();
+            return returnValidPhoneNumber();
         }
     }
+
 
     public boolean isEstablishmentsArrayEmpty()
     {
@@ -314,7 +332,7 @@ public class IO {
         else return false;
     }
 
-
+    //Prompts and gathers data via scanner obj and creates + stores Establishment in ArrayList
     public Establishment createEstablishment()
     {
         System.out.println("Establishment Information: \n");
@@ -325,36 +343,36 @@ public class IO {
         System.out.print("\tPostCode: ");
         String establishmentPostCode = sc.nextLine();
         System.out.print("\tMax Occupancy: ");
-        int maxOccupancy = getValidInt();
+        int maxOccupancy = returnPositiveInt();
         sc.nextLine(); // Read the leftover new line
 
         return new Establishment(establishmentName, establishmentFirstLineAddress, 
         establishmentPostCode, maxOccupancy);
     }
 
-
+    //Prompts and gathers data via scanner obj and creates + stores User in ArrayList
     public User createUser()
     {
         System.out.println("User Information:\n");
         System.out.print("\tName: ");
         String userName = sc.nextLine();
         System.out.print("\tDOB (Format dd/MM/yyyy): ");
-        String userDOB = getValidDate();
+        String userDOB = returnValidDate();
         System.out.print("\tEmail: ");
-        String userEmail = getValidEmail();
+        String userEmail = returnValidEmail();
         System.out.print("\tPhone Number: ");
-        String userPhoneNumber = getValidPhoneNumber();
+        String userPhoneNumber = returnValidPhoneNumber();
 
         return new User(userName, userDOB, userEmail, userPhoneNumber);
     }
 
-
+    //Prompts and gathers data via scanner obj and creates + stores Event in ArrayList
     public Event createEvent()
     {
         User user = createUser();
         
         System.out.print("\nParty Size: ");
-        int partySize = getValidInt();
+        int partySize = returnPositiveInt();
         System.out.println();
         sc.nextLine(); // Read the leftover new line
 
@@ -363,29 +381,29 @@ public class IO {
         return new Event(user, LocalDateTime.now(), partySize, establishment);
     }
 
-
+    //Prints the result of attemping to add a new Establishment obj to the event ArrayList
     public void printResultOfAddingEstablishment(Boolean result)
     {
-    if (result)
-    {
-        System.out.println("\nSucess! Establishment added to DB.\n");
-    }
-    else System.out.println("\nError! Establishment with that Name & PostCode already exists!\n" +
+        if (result)
+        {
+            System.out.println("\nSucess! Establishment added to DB.\n");
+        }
+        else System.out.println("\nError! Establishment with that Name & PostCode already exists!\n" +
                             "Select option 5 to view all stored Establishments.\n");
     }
 
-
+    //Prints the result of attemping to add a new Event obj to the event ArrayList
     public void printResultOfAddingEvent(Boolean... result)
     {
-    if (result[0] && result[1])
-    {
-        System.out.println("\nSucess! Event & Establishment added to DB.\n");
-    }
-    else if (result[0] && !result[1])
-    {
-        System.out.println("\nSucess! Event added to DB! (Establishment already exists).\n");
-    } 
-    else System.out.println("\nError! Event already exists!");
+        if (result[0] && result[1])
+        {
+            System.out.println("\nSucess! Event & Establishment added to DB.\n");
+        }
+        else if (result[0] && !result[1])
+        {
+            System.out.println("\nSucess! Event added to DB! (Establishment already exists).\n");
+        } 
+        else System.out.println("\nError! Event already exists!");
     }
 
 
@@ -394,6 +412,7 @@ public class IO {
         runMainMenu();
     }
 
+    //Some simple manual unit tests checking valid, boundary, erroneous, & extreme values
     public void debugMethod()
     {
         User me = new User("Elliot Hogg", "08/08/1992", "elliothogg@live.com", "07548377122");
@@ -428,11 +447,11 @@ public class IO {
     public static void main(String[] args) throws IOException
     {
 
-        new IO().debugMethod();
+        new IO().debugMethod(); //Executes some simple unit tests and pre-populates the event and establishment "DB" to faciliate manual menu testing
 
         //new IO().runProgram();
 
-        //new IO("src/establishments.csv").runProgram(); // create an IO object and add a csv file (which is automatically added to ArrayList)
+        //new IO("src/establishments.csv").runProgram(); //Runs with program & passes CSV Establishment data to establishment ArrayList
 
         
 
