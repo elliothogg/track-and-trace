@@ -253,6 +253,19 @@ public class IO {
         return sc.nextInt();
     }
 
+    //Takes a "field" and prompts for a value. Ensures String != null
+    public String returnNonEmptyString(String field)
+    {
+        System.out.print("\t" + field + ": ");
+        String input = sc.nextLine();
+        if (input.length() < 1)
+        {
+            System.out.print("\tInvalid input! ");
+            return returnNonEmptyString(field);
+        }
+        return input;
+    }
+
 
     public String returnValidDate()
     {   
@@ -336,12 +349,9 @@ public class IO {
     public Establishment createEstablishment()
     {
         System.out.println("Establishment Information: \n");
-        System.out.print("\tName: ");
-        String establishmentName = sc.nextLine();
-        System.out.print("\tFirst Line Address: ");
-        String establishmentFirstLineAddress = sc.nextLine();
-        System.out.print("\tPostCode: ");
-        String establishmentPostCode = sc.nextLine();
+        String establishmentName = returnNonEmptyString("Name");
+        String establishmentFirstLineAddress = returnNonEmptyString("First Line Address");
+        String establishmentPostCode = returnNonEmptyString("PostCode");
         System.out.print("\tMax Occupancy: ");
         int maxOccupancy = returnPositiveInt();
         sc.nextLine(); // Read the leftover new line
@@ -354,8 +364,7 @@ public class IO {
     public User createUser()
     {
         System.out.println("User Information:\n");
-        System.out.print("\tName: ");
-        String userName = sc.nextLine();
+        String userName = returnNonEmptyString("Name");
         System.out.print("\tDOB (Format dd/MM/yyyy): ");
         String userDOB = returnValidDate();
         System.out.print("\tEmail: ");
@@ -415,24 +424,75 @@ public class IO {
     //Some simple manual unit tests checking valid, boundary, erroneous, & extreme values
     public void debugMethod()
     {
+        // ## Object instantiation testing
+
+
+        // ### User
+
+        //Two valid User object instantiations
         User me = new User("Elliot Hogg", "08/08/1992", "elliothogg@live.com", "07548377122");
         User me1 = new User("Daniel", "08/08/1992", "Daniel@live.com", "07548377122");
+        
+        //User invalidDOB = new User("Daniel", 08/08/1992, "Daniel@live.com", "07548377122");
+        
+
+        // ### Establishment
+
+        //Three valid Establishment object instantiations
         Establishment e1 = new Establishment("elli", "sdfsf", "FA1 d3KE", 5);
         Establishment e2 = new Establishment("eyll", "Street", "FA1 3KE", 5);
         Establishment e3 = new Establishment("ellf", "1 King", "FA1 ds3KE", 5);
+
+        //Establishment invalidOccupancy = new Establishment("ellf", "1 King", "FA1 ds3KE", "invalid");
+        //Establishment extremeValue1 = new Establishment(null, "1 King", "FA1 ds3KE", "invalid");
+
+
+        // ### Event
+
+        //Four valid Event Instantiations
         Event e = new Event(me,LocalDateTime.of(2020, 11, 02, 12, 12, 12), 2, e1);
         Event d = new Event(me1,LocalDateTime.now(), 4, e1);
         Event f = new Event(me,LocalDateTime.now(), 4, e2);
         Event g = new Event(me1,LocalDateTime.now(), 4, e3);
         
-        //declare some objects that would fail - 12 number phones etc 
+        //Event invalidPartyNumber1 = new Event(me1,LocalDateTime.now(), 0, e3);
+        //Event invalidPartyNumber2 = new Event(me1,LocalDateTime.now(), -10000 e3);
+        //Event invalidPartyNumber3 = new Event(me1,LocalDateTime.now(), "hello" e3);
+        
 
-        //object decs that have erronious params - String where int is needed 
+        // ## IO Individual Method Testing
 
-        //boundary - can establishmnet have 0 for max occupancy or -1.  number in event party
+        //returnValidEmail();
+        //Invalid Strings: "elliothogglive.com", "elliothogg@livecom"
+        //Valid String: elliothogg@live.com
 
-        //exreme - null in place of String
 
+        //returnValidPhoneNumber();
+        //Invalid Strings: "90948574859", "089586758493", "08938473643", "059"
+        //Valid String: "07869586758"
+
+
+        //returnNonEmptyString();
+        //Invalid Strings: "", null
+        //valid Strings: "Ell", "BK", "GBK", "Mo"
+
+
+        //returnValidInt();
+        //Invalid input: "hello", 23.5, 23f
+        //Valid input: 12, 1, 9999
+
+
+        //returnPositiveInt();
+        //Invalid input: -1, 0, -99999999999
+        //Valid input: 1, 999999999999
+
+
+        //returnValidDate();
+        //Invalid input: "08/08/2030", "32/04/1992", 08.08.1992, "hello", 99999999999
+        //valid input: 08/08/1992, 08/11/2020
+        
+
+        //pre-populate event & establishment ArrayLists for manual menu testing
         c.addEvent(e);
         c.addEvent(d);
         c.addEvent(f);
@@ -447,9 +507,9 @@ public class IO {
     public static void main(String[] args) throws IOException
     {
 
-        new IO().debugMethod(); //Executes some simple unit tests and pre-populates the event and establishment "DB" to faciliate manual menu testing
+        //new IO().debugMethod(); //Executes some simple unit tests and pre-populates the event and establishment "DB" to faciliate manual menu testing
 
-        //new IO().runProgram();
+        new IO().runProgram();
 
         //new IO("src/establishments.csv").runProgram(); //Runs with program & passes CSV Establishment data to establishment ArrayList
 
