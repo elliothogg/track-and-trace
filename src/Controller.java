@@ -5,7 +5,7 @@
  * This project was written as a University project.
  * 
  * @author	Elliot Hogg
- * @version 1.13  (07 Nov 2020)
+ * @version 1.14  (09 Nov 2020)
  * 
  */
 
@@ -35,7 +35,7 @@ public class Controller {
         //this ommits the first line of the csv file
         csvReader.readLine();
 
-        //loop through each line, split Stings by ",", and create an Establishment object
+        //loop through each line, split Strings by ",", and create an Establishment object
         while ((eachLine = csvReader.readLine()) != null)
         {
             String[] array = eachLine.split(",");
@@ -152,7 +152,7 @@ public class Controller {
 
         Controller c = new Controller();
         
-        Controller c1 = new Controller("src/establishments.csv");
+        Controller c1 = new Controller("establishments.csv"); //Some IDE code runners want "src/establishments.csv"
 
         System.out.println(c1.getEstablishments());
 
@@ -189,7 +189,5 @@ public class Controller {
         
         // System.out.println(c1.getEvents());
         // System.out.println(c1.filterEventsByDate("03/11/2020"));
-
-    
     }
 }

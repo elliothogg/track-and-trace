@@ -5,7 +5,7 @@
  * This project was written as a University project.
  * 
  * @author	Elliot Hogg
- * @version 1.13  (07 Nov 2020)
+ * @version 1.14  (09 Nov 2020)
  * 
  */
 
@@ -113,6 +113,5 @@ public class Event {
         System.out.println(ev1.getEventTime());
         System.out.println(ev1.getEventDate());
         System.out.println(ev1.getUser());
-
     }
 }

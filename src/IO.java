@@ -7,7 +7,7 @@
  * This project was written as a University project.
  * 
  * @author	Elliot Hogg
- * @version 1.13  (07 Nov 2020)
+ * @version 1.14  (09 Nov 2020)
  * 
  */
 
@@ -23,7 +23,6 @@ public class IO {
 
     private final Controller c;
     
-
     Scanner sc = new Scanner(System.in);
 
     IO()
@@ -154,8 +153,7 @@ public class IO {
             {
                 case 1:
                     System.out.println("\n*********** EVENTS BY ESTABLISHMENT *********\n");
-                    System.out.print("Enter Establishment Name: ");
-                    String establishmentName = sc.nextLine();
+                    String establishmentName = returnNonEmptyString("Enter Establishment Name");
                     System.out.println();
                     if (!controllerIn.filterEventsByEstablishment(establishmentName).isEmpty())
                     {
@@ -178,9 +176,8 @@ public class IO {
 
                 case 3:
                     System.out.println("\n*********** EVENTS BY USER NAME & EMAIL *********\n");
-                    System.out.print("Enter Users Name: ");
-                    String userName = sc.nextLine();
-                    System.out.print("Enter Users Email: ");
+                    String userName = returnNonEmptyString("Enter Users Name");
+                    System.out.print("\tEnter Users Email: ");
                     String userEmail = returnValidEmail();
                     System.out.println();
                     if (!controllerIn.filterEventsByUser(userName, userEmail).isEmpty())
@@ -218,7 +215,7 @@ public class IO {
         }
     }
 
-    ////Loops through all items in passed ArrayList and neatly prints them
+    //Loops through all items in passed ArrayList and neatly prints them
     public void establishmentPrinter(ArrayList<Establishment> establishments)
     {
         for (int i = 0; i < establishments.size(); i++)
@@ -253,7 +250,7 @@ public class IO {
         return sc.nextInt();
     }
 
-    //Takes a "field" and prompts for a value. Ensures String != null
+    //Prints "field" to prompt for value, then ensures Scanner input String != null
     public String returnNonEmptyString(String field)
     {
         System.out.print("\t" + field + ": ");
@@ -345,7 +342,7 @@ public class IO {
         else return false;
     }
 
-    //Prompts and gathers data via scanner obj and creates + stores Establishment in ArrayList
+    //Prompts and gathers data via scanner obj and returns Establishment obj
     public Establishment createEstablishment()
     {
         System.out.println("Establishment Information: \n");
@@ -360,7 +357,7 @@ public class IO {
         establishmentPostCode, maxOccupancy);
     }
 
-    //Prompts and gathers data via scanner obj and creates + stores User in ArrayList
+    //Prompts and gathers data via scanner obj and returns User obj
     public User createUser()
     {
         System.out.println("User Information:\n");
@@ -375,7 +372,7 @@ public class IO {
         return new User(userName, userDOB, userEmail, userPhoneNumber);
     }
 
-    //Prompts and gathers data via scanner obj and creates + stores Event in ArrayList
+    //Prompts and gathers data via scanner obj and returns Event obj
     public Event createEvent()
     {
         User user = createUser();
@@ -390,7 +387,7 @@ public class IO {
         return new Event(user, LocalDateTime.now(), partySize, establishment);
     }
 
-    //Prints the result of attemping to add a new Establishment obj to the event ArrayList
+    //Prints the result of attemping to add a new Establishment obj to the establishment ArrayList
     public void printResultOfAddingEstablishment(Boolean result)
     {
         if (result)
@@ -479,7 +476,7 @@ public class IO {
 
         //returnValidInt();
         //Invalid input: "hello", 23.5, 23f
-        //Valid input: 12, 1, 9999
+        //Valid input: -9999999, 1, 99999999999
 
 
         //returnPositiveInt();
@@ -488,8 +485,8 @@ public class IO {
 
 
         //returnValidDate();
-        //Invalid input: "08/08/2030", "32/04/1992", 08.08.1992, "hello", 99999999999
-        //valid input: 08/08/1992, 08/11/2020
+        //Invalid input: "08/08/2030", "32/04/1992", "08.08.1992" , "hello", 99999999999
+        //valid input: "08/08/1992", "08/11/2020"
         
 
         //pre-populate event & establishment ArrayLists for manual menu testing
@@ -507,16 +504,11 @@ public class IO {
     public static void main(String[] args) throws IOException
     {
 
-        //new IO().debugMethod(); //Executes some simple unit tests and pre-populates the event and establishment "DB" to faciliate manual menu testing
+        new IO().debugMethod(); //Pre-populates the event and establishment "DB" to faciliate manual menu testing, then runs the program
 
-        new IO().runProgram();
+        //new IO().runProgram();
 
-        //new IO("src/establishments.csv").runProgram(); //Runs with program & passes CSV Establishment data to establishment ArrayList
-
-        
-
-        
-        
-        
+        //new IO("establishments.csv").runProgram(); //Runs program & passes CSV Establishment data to establishment ArrayList
+                                                   //Some IDE code runners want "src/establishments.csv"
     }
 }
